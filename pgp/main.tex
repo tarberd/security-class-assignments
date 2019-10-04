@@ -1,10 +1,10 @@
-\documentclass[12pt]{article}
+\documentclass[12pt, letterpaper]{article}
 
 \title{Relatorio do Trabalho Individual 3: PGP}
 \author{Bernardo Ferrari Mendonça}
-\maketitle
 
 \begin{document}
+\maketitle
 
 \section{Criar um certificado PGP:}
 
@@ -41,6 +41,18 @@ então, é enviada a chave já revogada novamente para o servidor de chaves:
 \begin{quote}
   gpg --send-keys --keyserver keyserver.ubuntu.com AC13A373
 \end{quote}
+para testar se a chave foi atualizada no \textit{keyserver},
+foi importada a chave em um segundo computador onde foi obtido o seguinte resultado:
 
+\begin{quote}
+\begin{verbatim}
+pub   rsa2048 2019-10-03 [SC] [revoked: 2019-10-03]
+      AC13A37374425750A38E1453C0D3F333DE42B310
+uid   [ revoked] Bernardo Ferrari (quick test key)
+<bernardom.ferrari@gmail.com>
+\end{verbatim}
+\end{quote}
+
+\section{Assine o certificado PGP de outra pessoa, depois revogue essa assinatura:}
 
 \end{document}
