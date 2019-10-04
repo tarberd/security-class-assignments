@@ -1,0 +1,46 @@
+\documentclass[12pt]{article}
+
+\title{Relatorio do Trabalho Individual 3: PGP}
+\author{Bernardo Ferrari Mendonça}
+\maketitle
+
+\begin{document}
+
+\section{Criar um certificado PGP:}
+
+Foi feito o backup da chave privada em formato \textit{armored} em um disco separado.
+
+A chave privada foi publicado em \textbf{keyserver.ubuntu.com}.
+
+\textbf{TODO:} Dizer qual é a chave.
+
+\section{Criar um novo certificado PGP e revogá-lo:}
+
+Foi criado um novo certificado PGP, sua chave pública é:
+
+\begin{quote}
+  AC13A37374425750A38E1453C0D3F333DE42B310
+\end{quote}
+
+O certificado foi publicado em \textbf{keyserver.ubuntu.com}
+\begin{quote}
+  gpg --send-keys --keyserver keyserver.ubuntu.com AC13A373
+\end{quote}
+logo após, foi criado um certificado de revogação utilizando o comando:
+
+\begin{quote}
+  gpg --gen-revoke AC13A373 \textgreater{} revoke.asc
+\end{quote}
+
+O certificado de revogação foi salvo em um arquivo \textbf{revoke.asc}
+e foi e importado para a \textit{keyring}:
+\begin{quote}
+  gpg --import revoke.asc
+\end{quote}
+então, é enviada a chave já revogada novamente para o servidor de chaves:
+\begin{quote}
+  gpg --send-keys --keyserver keyserver.ubuntu.com AC13A373
+\end{quote}
+
+
+\end{document}
