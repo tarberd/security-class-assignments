@@ -53,6 +53,81 @@ uid   [ revoked] Bernardo Ferrari (quick test key)
 \end{verbatim}
 \end{quote}
 
-\section{Assine o certificado PGP de outra pessoa, depois revogue essa assinatura:}
+\section{Assine o certificado PGP de outra pessoa,
+depois revogue essa assinatura:}
+
+\textbf{TODO:} Fazer a chave e assinar.
+
+\section{O que é o anel de chaves privadas:}
+
+O \textit{keyring}, ou Anel de chaves, é separado em
+um \textit{keyring} de chaves públicas e um \textit{keyring}
+de chaves privadas.
+
+O \textit{keyring} de chaves públicas é armazenado
+em um arquivo chamado \textbf{pubring.kbx} e contém
+todas as informações de cada chave pública importada
+no \textit{keyring}.
+
+O \textit{keyring} de chaves privadas é armazenado
+em um diretório chamado \textbf{private-keys-v1.d}
+e dentro cada chave privada é armazenada em seu
+próprio arquivo identificado por um número chamado
+\textbf{keygrip}.
+
+Todas essas estruturas ficam guardadas dentro de
+um diretório chamado:
+\begin{quote}
+  \textbf{\$HOME/.gnupg/}
+\end{quote}
+Este diretório é construido com permições de \textbf{leitura}, \textbf{escrita}
+e \textbf{execução} somente para o usuário dono da \textit{keyring}.
+
+\section{Diferença entre assinar uma chave local e assinar em um servidor:}
+
+\textbf{TODO:} Assinar no servidor seria dar push da chave assinada no servidor?
+
+\section{O que é a \textit{web of trust} e como ela é organizada:}
+
+A \textit{web of trust} ou, banco de dados de confiabilidade,
+é organizada a partir de assinaturas de confiabilidade.
+Se Alice confia na chave pública de Bob, Alice importa
+a chave pública de Bob para sua \textit{keyring} e
+assina a chava publica de Bob utilizando sua chave privada.
+
+Essa Assinatura pode tomar os seguintes valores de confiabilidade,
+também chamados de \textit{trust values}:
+\begin{itemize}
+  \item \textbf{unknown:}
+    Não se sabe nada sobre a capacidade do dono da chave quanto a segurança de assinaturas.
+    Chaves na sua \textit{keyring} pública que você não é dono inicialmente possuem esse \textit{trust level}.
+  \item \textbf{never:}
+    É de seu conhecimento que o dono da chave utiliza as assinaturas de forma imprópria.
+  \item \textbf{marginal:}
+    O dono da chave entende as implicações de assinaturas e valida as chaves antes de assinalas.
+  \item \textbf{full:}
+    O dono da chave é excepcional quanto a assinatura de chaves.
+  \item \textbf{ultimate:}
+    Valor especial para chaves do dono da \textit{keyring}.
+\end{itemize}
+
+A chave publica assinada pode ser devolvida para o dono da chave ou publicada em um
+\textit{keyserver} para que todos saibam que você confica na chave publica.
+
+No protocolo de \textit{web of trust} do PGP, um algoritmo mais flexivel de confiabilidade pode ser utilizado:
+uma chave \textbf{K} pode ser considerada valida se ela:
+\begin{enumerate}
+    \item é assinada por uma quantidade suficiente de chaves, ou seja:
+      \begin{enumerate}
+          \item você mesmo assinou essa chave, ou;
+          \item foi assinada por uma chave de confiabilidade \textit{full}, ou;
+          \item foi assinada por três chaves de confiabilidade \textit{marginal}, e;
+      \end{enumerate}
+    \item o caminho entre a chave \textbf{K} até sua chave é de
+      cinco passos ou menos.
+\end{enumerate}
+
+Seguindo esse algoritmo é consedido a cada chave da keyring um valor de validade possivelmente
+diferente do \textit{trust value}.
 
 \end{document}
