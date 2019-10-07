@@ -175,4 +175,31 @@ uma chave \textbf{K} pode ser considerada valida se ela:
 Seguindo esse algoritmo é consedido a cada chave da keyring um valor de validade possivelmente
 diferente do \textit{trust value}.
 
+\section{O que são sub-chaves e pra que elas servem?}
+
+O protocolo PGP da suporte a sub-chaves, ou \textit{subkeys}. \textit{Subkeys} são iguais a
+pares de chaves normais exceto pelo fato de estarem ligadas a um par de chaves mestre.
+O GPG cria um par de chaves mestre cujo a chave mestre prívada é somente para assinaturas
+e cria uma \textit{subkey} privada somente para criptografar.
+
+As \textit{subkeys} facilitam o gerenciamento de chaves. A chave mestre é muito importante
+pois é a melhor prova de sua identidade online para vários serviços. Na eventual perda da
+chave mestre privada, será necessario construir a \textit{web of trust} novamente.
+É necessario manter a chave mestre privada super segura. Contudo, manter todas suas chaves
+de mandaira extremamente segura é inconveniente.
+
+Usando \textit{subkeys} é possivel manter somente as subkeys nos computadores de uso pessoal
+e guardar a chave privada em segurança.
+
+Após criar uma segunda \textit{subkey} para assinaturas, só sera necessario o uso da chave privada
+nas seguintes ocasiões:
+\begin{itemize}
+  \item quando você assinal ou revogar a chave publica de outra pessoa; ou
+  \item quando você addicionar um novo UID ou editar um existente; ou
+  \item quando você criar uma nova \textit{subkey}; ou
+  \item quando você revogar um UID ou \textit{subkey}; ou
+  \item quando você editar a data de vencimento da chave mestre ou qualquer \textit{subkey}; ou
+  \item quando você revogar ou gerar um certificado de revogação para uma chave completa.
+\end{itemize}
+
 \end{document}
