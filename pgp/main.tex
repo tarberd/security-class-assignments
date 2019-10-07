@@ -85,9 +85,54 @@ e \textbf{execução} somente para o usuário dono da \textit{keyring}.
 
 \section{Diferença entre assinar uma chave local e assinar em um servidor:}
 
-\textbf{TODO:} Assinar no servidor seria dar push da chave assinada no servidor?
+Uma chave pública assinada cria uma relação de confiabilidade entre
+a chave assinante e a chave assinada, é vantajoso para o portador de
+uma chave pública que sua chave estaja assinada por varias chaves distintas.
 
-\section{O que é a \textit{web of trust} e como ela é organizada:}
+Assinatura de chaves são feitas para garantir duas propriedades principais:
+\begin{itemize}
+    \item ela permite a detecção de fraudes e permite que você certifique
+      que uma dada chave realmente pertence a pessoa referente ao \textit{UserID}
+      da chave.
+    \item ela faz parte de uma rede de confiabilidade chamada de \textit{web of trust}
+      para extender a confiabilidade de maneira transitiva entre assinaturas. Esse conseito
+      será explorado a fundo na seção~\ref{weboftrust}.
+\end{itemize}
+Usuarios responsaveis que seguem boas praticas de assinatura de chaves conseguem
+detectar e se proteger de qualquer eventual fraude de identidade.
+
+Idealmente, você distribuiria sua chave pessoalmente entragando cópias para seus correspondentes.
+Porém, na pratica, chaves acabam sendo distribuidas por email ou algum outro meio de comunicação.
+A distribuição por email é uma boa pratica quando você tem poucos correspondentes, ou até mesmo
+se você possui muitos correspondentes. Pode-se usar como uma alternativa publicar sua chave
+publica em um site pessoal na internet. Porém, isso se torna um problema quando um terceiro que
+deseja se comunicar não sabe onde encontrar sua chave.
+
+Para resolver esse problema, \textit{keyservers} ou servidores de chaves publicas são
+usados para coletar e distribuir chaves públicas.
+Uma chave pública recebiada por um \textit{keyserver} é:
+\begin{itemize}
+  \item addicionada ao \textit{keyring} de chaves públicas; ou,
+  \item é feita uma fusão com a chave existente no servidor.
+\end{itemize}
+Quando alguem precisar de sua chave pública, essa pessoa consulta sua chave na sua \textit{keyring}
+e responde a consulta com a verção da sua chave publica que se encontra atualizada no \textit{keyserver}.
+
+O uso de um \textit{keyserver} é vantajoso quando varias pessoas estão frequentemente validando
+as chaves de outras pessoas. Sem o uso de um \textit{keyserver}, quando Bob assina a chave de Alice,
+Bob deveria enviar para Alice uma copia da chave publica de Alice assinada por Bob para que Alice
+atualize sua propria chave publica e que possa re-distribuir sua nova chave pública assinada por Bob
+para seus correspondentes. Esse esforço é necessario para que Alice e Bob cumpram seu papel em construir
+uma rede de confiabilidade, assim contribuindo com a segurança do protocolo PGP\@.
+
+Utilizar um \textit{keyserver} simplifica o processo de assinatura de chaves.
+Quando bob assina a chave de Alice, ele envia essa chave assinada para o \textit{keyserver}.
+Então o servidor adiciona a assinatura de Bob a sua cópia da chave de Alice.
+Terceiros que desejam atualizar suas cópias da chave de Alice podem consultar o servidor
+por conta própria. Assim Alice não fica envolvida no processo de districuição da sua chave publica
+pois o \textit{keyserver} toma esse papel.
+
+\section{O que é a \textit{web of trust} e como ela é organizada:}\label{weboftrust}
 
 A \textit{web of trust} ou, banco de dados de confiabilidade,
 é organizada a partir de assinaturas de confiabilidade.
