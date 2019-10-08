@@ -10,9 +10,10 @@
 
 Foi feito o backup da chave privada em formato \textit{armored} em um disco separado.
 
-A chave privada foi publicado em \textbf{keyserver.ubuntu.com}.
-
-\textbf{TODO:} Dizer qual é a chave.
+A chave pública foi publicado em \textbf{keyserver.ubuntu.com}. Sua chave pública é:
+\begin{quote}
+  A9263FA40C1B31AD225E63D1F10C65B5802ADBBE
+\end{quote}
 
 \section{Criar um novo certificado PGP e revogá-lo:}
 
@@ -56,7 +57,47 @@ uid   [ revoked] Bernardo Ferrari (quick test key)
 \section{Assine o certificado PGP de outra pessoa,
 depois revogue essa assinatura:}
 
-\textbf{TODO:} Fazer a chave e assinar.
+Primeiro foi importada a chave publica do Francisco Vicenzi:
+\begin{quote}
+  gpg --keyserver keyserver.ubuntu.com --recv-keys C0153CE4
+\end{quote}
+Depois foi a chave foi editada rodando os seguintes comandos:
+\begin{quote}
+  gpg gpg --edit-key franciscovicenzi@gmail.com \\
+  gpg \textgreater{} sign \\
+  gpg \textgreater{} save
+\end{quote}
+Depois for enviada a chave para o \textit{keyserver}:
+\begin{quote}
+  gpg --keyserver keyserver.ubuntu.com --send-keys C0153CE4
+\end{quote}
+Depois de enviado, a assinatura apareceu no \textit{keyserver}:
+\begin{quote}
+\begin{verbatim}
+sig  sig  f10c65b5802adbbe 2019-10-08t19:12:13z
+____________________ ____________________ f10c65b5802adbbe
+\end{verbatim}
+\end{quote}
+
+Após a assinatura, foi feita a revogação da mesma:
+\begin{quote}
+  gpg gpg --edit-key franciscovicenzi@gmail.com \\
+  gpg \textgreater{} revsig \\
+  gpg \textgreater{} save
+\end{quote}
+Depois foi enviada a chave revogada para o \textit{keyserver}:
+\begin{quote}
+  gpg --keyserver keyserver.ubuntu.com --send-keys C0153CE4
+\end{quote}
+Depois de enviada, foi feita a verificação no \textit{keyserver}:
+\begin{quote}
+\begin{verbatim}
+sig  sig  f10c65b5802adbbe 2019-10-08t19:12:13z
+____________________ ____________________ f10c65b5802adbbe
+sig revok f10c65b5802adbbe 2019-10-08T19:40:34Z
+____________________ ____________________ f10c65b5802adbbe
+\end{verbatim}
+\end{quote}
 
 \section{O que é o anel de chaves privadas:}
 
@@ -201,5 +242,20 @@ nas seguintes ocasiões:
   \item quando você editar a data de vencimento da chave mestre ou qualquer \textit{subkey}; ou
   \item quando você revogar ou gerar um certificado de revogação para uma chave completa.
 \end{itemize}
+
+\section{Coloque uma foto no seu certificado GPG}
+
+Para colocar uma foto em meu certificado GPG foram executados os seguintes commandos:
+\begin{quote}
+  gpg --edit-key bernardo.mferrari@gmail.com \\
+  gpg \textgreater{} addphoto pikachu.jpg \\
+  gpg \textgreater{} save\\
+\end{quote}
+
+\section{O que é preciso para criar e manter um servidor de chaves GPG, sincronizado com os demais servidores existentes?}
+
+\section{Dê um exemplo de como tornar sigiloso um arquivo usando o GPG:}
+
+\section{Mostre um exemplo de como assinar um arquivo (assinatura anexada e outro com assinatura separada), usando o GPG:}
 
 \end{document}
