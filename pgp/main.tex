@@ -245,16 +245,23 @@ nas seguintes ocasiões:
 
 \section{Coloque uma foto no seu certificado GPG}
 
-Para colocar uma foto em meu certificado GPG foram executados os seguintes commandos:
+Para colocar uma foto em meu certificado GPG foram executados os seguintes comandos:
 \begin{quote}
   gpg --edit-key bernardo.mferrari@gmail.com \\
   gpg \textgreater{} addphoto pikachu.jpg \\
-  gpg \textgreater{} save\\
+  gpg \textgreater{} save
 \end{quote}
 
 \section{O que é preciso para criar e manter um servidor de chaves GPG, sincronizado com os demais servidores existentes?}
 
 \section{Dê um exemplo de como tornar sigiloso um arquivo usando o GPG:}
+
+Suponha que desejamos enviar um arquivo de texto \textbf{mydoc.txt} para outra pessoa, porém,
+precisamos tornar esse texto sigiloso para que nenhum terceiro possa compreender seu conteudo.
+O protocolo PGP torna isso possivel através dos seguintes comandos:
+\begin{quote}
+  gpg --output doc.gpg --encrypt --recipient blake@cyb.org doc
+\end{quote}
 
 \section{Mostre um exemplo de como assinar um arquivo (assinatura anexada e outro com assinatura separada), usando o GPG:}
 
