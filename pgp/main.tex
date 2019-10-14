@@ -254,14 +254,37 @@ Para colocar uma foto em meu certificado GPG foram executados os seguintes coman
 
 \section{O que é preciso para criar e manter um servidor de chaves GPG, sincronizado com os demais servidores existentes?}
 
+No protocolo PGP clientes acabam confiando em \textit{keyservers} PGP para guardar e receber copias das chaves suas chaves
+publicas e das chaves publicas de terceiros. Essa comunicação entre os clientes PGP e \textit{keyservers} PGP se da utilizando
+o protocolo HKP (OpenPGP HTTP Keyserver Protocol) ou HKPS para a verção segura TLS\@.
+
+Um \textit{keyserver} malicioso poderia alterar as chaves e manipular a \textit{\textbf{web of trust}} ao seu favor, para isso
+foram criadas as \textit{\textbf{keyserver pool}}.
+
+\subsection{A \textit{keyserver pool}:}
+
+Para uma melhor segurança os \textit{keyservers} são organizados em um \textbf{DNS}.
+Quando um cliente OpenPGP precisa se comunicar com um \textit{keyservers} ele consulta
+o endereço hkps.pool.sks-keyservers.net que retorna a tablela de endereços ipv4 e ipv6
+de \textit{keyservers} onde o cliente escolhera aleatoriamente com quem se conectar.
+
+O dominio sks-keyservers.net é segurado pelo DNSSEC\@.
+
+\subsection{Como criar seu proprio \textit{keyserver} e conectalo à \textit{keyserver pool}: }
+
+Para configurar seu proprio OpenPGP \textit{keyserver} é utilizado o \textit{\textbf{Synchronizing OpenPGP Key Server (SKS)}}.
+Esse servidor vai ser inserido em uma \textit{keyserver pool} e se manter atualizado por uma \textit{mailing list} SKS do OpenPGP\@.
+
 \section{Dê um exemplo de como tornar sigiloso um arquivo usando o GPG:}
 
 Suponha que desejamos enviar um arquivo de texto \textbf{mydoc.txt} para outra pessoa, porém,
 precisamos tornar esse texto sigiloso para que nenhum terceiro possa compreender seu conteudo.
 O protocolo PGP torna isso possivel através dos seguintes comandos:
 \begin{quote}
-  gpg --output doc.gpg --encrypt --recipient blake@cyb.org doc
+  gpg --output mydoc.gpg --encrypt --recipient blake@cyb.org mydoc.txt
 \end{quote}
+Assim o arquivo \textbf{mydoc.gpg} só pode ser descriptografado pelo portador do par privado da chave pública utilizada
+para cifragem, o par foi identificado pelo \textit{UserID} blake@cyb.org.
 
 \section{Mostre um exemplo de como assinar um arquivo (assinatura anexada e outro com assinatura separada), usando o GPG:}
 
