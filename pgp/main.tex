@@ -281,10 +281,16 @@ Suponha que desejamos enviar um arquivo de texto \textbf{mydoc.txt} para outra p
 precisamos tornar esse texto sigiloso para que nenhum terceiro possa compreender seu conteudo.
 O protocolo PGP torna isso possivel através dos seguintes comandos:
 \begin{quote}
-  gpg --output mydoc.gpg --encrypt --recipient blake@cyb.org mydoc.txt
+  gpg --armor --output mydoc.crypt.txt --encrypt --recipient nicolas0pfeifer@gmail.com mydoc.txt
 \end{quote}
-Assim o arquivo \textbf{mydoc.gpg} só pode ser descriptografado pelo portador do par privado da chave pública utilizada
-para cifragem, o par foi identificado pelo \textit{UserID} blake@cyb.org.
+Assim o arquivo \textbf{mydoc.crypt.txt} só pode ser descriptografado pelo portador do par privado da chave pública utilizada
+para cifragem, o par foi identificado pelo \textit{UserID} nicolas0pfeifer@gmail.com.
+
+Foi me enviada também uma mensagem \textbf{oi.cript} criptografada com minha chave publica.
+Para descriptografar esta mensagem cifrada com a minha chave privada é utilizado o seguinte comando:
+\begin{quote}
+  gpg --output oi --decrypt oi.cript
+\end{quote}
 
 \section{Mostre um exemplo de como assinar um arquivo (assinatura anexada e outro com assinatura separada), usando o GPG:}
 
