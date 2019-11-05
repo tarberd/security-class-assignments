@@ -10,9 +10,10 @@
 
 Foi feito o backup da chave privada em formato \textit{armored} em um disco separado.
 
-A chave privada foi publicado em \textbf{keyserver.ubuntu.com}.
-
-\textbf{TODO:} Dizer qual é a chave.
+A chave pública foi publicado em \textbf{keyserver.ubuntu.com}. Sua chave pública é:
+\begin{quote}
+  A9263FA40C1B31AD225E63D1F10C65B5802ADBBE
+\end{quote}
 
 \section{Criar um novo certificado PGP e revogá-lo:}
 
@@ -56,7 +57,47 @@ uid   [ revoked] Bernardo Ferrari (quick test key)
 \section{Assine o certificado PGP de outra pessoa,
 depois revogue essa assinatura:}
 
-\textbf{TODO:} Fazer a chave e assinar.
+Primeiro foi importada a chave publica do Francisco Vicenzi:
+\begin{quote}
+  gpg --keyserver keyserver.ubuntu.com --recv-keys C0153CE4
+\end{quote}
+Depois foi a chave foi editada rodando os seguintes comandos:
+\begin{quote}
+  gpg gpg --edit-key franciscovicenzi@gmail.com \\
+  gpg \textgreater{} sign \\
+  gpg \textgreater{} save
+\end{quote}
+Depois for enviada a chave para o \textit{keyserver}:
+\begin{quote}
+  gpg --keyserver keyserver.ubuntu.com --send-keys C0153CE4
+\end{quote}
+Depois de enviado, a assinatura apareceu no \textit{keyserver}:
+\begin{quote}
+\begin{verbatim}
+sig  sig  f10c65b5802adbbe 2019-10-08t19:12:13z
+____________________ ____________________ f10c65b5802adbbe
+\end{verbatim}
+\end{quote}
+
+Após a assinatura, foi feita a revogação da mesma:
+\begin{quote}
+  gpg gpg --edit-key franciscovicenzi@gmail.com \\
+  gpg \textgreater{} revsig \\
+  gpg \textgreater{} save
+\end{quote}
+Depois foi enviada a chave revogada para o \textit{keyserver}:
+\begin{quote}
+  gpg --keyserver keyserver.ubuntu.com --send-keys C0153CE4
+\end{quote}
+Depois de enviada, foi feita a verificação no \textit{keyserver}:
+\begin{quote}
+\begin{verbatim}
+sig  sig  f10c65b5802adbbe 2019-10-08t19:12:13z
+____________________ ____________________ f10c65b5802adbbe
+sig revok f10c65b5802adbbe 2019-10-08T19:40:34Z
+____________________ ____________________ f10c65b5802adbbe
+\end{verbatim}
+\end{quote}
 
 \section{O que é o anel de chaves privadas:}
 
@@ -85,9 +126,54 @@ e \textbf{execução} somente para o usuário dono da \textit{keyring}.
 
 \section{Diferença entre assinar uma chave local e assinar em um servidor:}
 
-\textbf{TODO:} Assinar no servidor seria dar push da chave assinada no servidor?
+Uma chave pública assinada cria uma relação de confiabilidade entre
+a chave assinante e a chave assinada, é vantajoso para o portador de
+uma chave pública que sua chave estaja assinada por varias chaves distintas.
 
-\section{O que é a \textit{web of trust} e como ela é organizada:}
+Assinatura de chaves são feitas para garantir duas propriedades principais:
+\begin{itemize}
+    \item ela permite a detecção de fraudes e permite que você certifique
+      que uma dada chave realmente pertence a pessoa referente ao \textit{UserID}
+      da chave.
+    \item ela faz parte de uma rede de confiabilidade chamada de \textit{web of trust}
+      para extender a confiabilidade de maneira transitiva entre assinaturas. Esse conseito
+      será explorado a fundo na seção~\ref{weboftrust}.
+\end{itemize}
+Usuarios responsaveis que seguem boas praticas de assinatura de chaves conseguem
+detectar e se proteger de qualquer eventual fraude de identidade.
+
+Idealmente, você distribuiria sua chave pessoalmente entragando cópias para seus correspondentes.
+Porém, na pratica, chaves acabam sendo distribuidas por email ou algum outro meio de comunicação.
+A distribuição por email é uma boa pratica quando você tem poucos correspondentes, ou até mesmo
+se você possui muitos correspondentes. Pode-se usar como uma alternativa publicar sua chave
+publica em um site pessoal na internet. Porém, isso se torna um problema quando um terceiro que
+deseja se comunicar não sabe onde encontrar sua chave.
+
+Para resolver esse problema, \textit{keyservers} ou servidores de chaves publicas são
+usados para coletar e distribuir chaves públicas.
+Uma chave pública recebiada por um \textit{keyserver} é:
+\begin{itemize}
+  \item addicionada ao \textit{keyring} de chaves públicas; ou,
+  \item é feita uma fusão com a chave existente no servidor.
+\end{itemize}
+Quando alguem precisar de sua chave pública, essa pessoa consulta sua chave na sua \textit{keyring}
+e responde a consulta com a verção da sua chave publica que se encontra atualizada no \textit{keyserver}.
+
+O uso de um \textit{keyserver} é vantajoso quando varias pessoas estão frequentemente validando
+as chaves de outras pessoas. Sem o uso de um \textit{keyserver}, quando Bob assina a chave de Alice,
+Bob deveria enviar para Alice uma copia da chave publica de Alice assinada por Bob para que Alice
+atualize sua propria chave publica e que possa re-distribuir sua nova chave pública assinada por Bob
+para seus correspondentes. Esse esforço é necessario para que Alice e Bob cumpram seu papel em construir
+uma rede de confiabilidade, assim contribuindo com a segurança do protocolo PGP\@.
+
+Utilizar um \textit{keyserver} simplifica o processo de assinatura de chaves.
+Quando bob assina a chave de Alice, ele envia essa chave assinada para o \textit{keyserver}.
+Então o servidor adiciona a assinatura de Bob a sua cópia da chave de Alice.
+Terceiros que desejam atualizar suas cópias da chave de Alice podem consultar o servidor
+por conta própria. Assim Alice não fica envolvida no processo de districuição da sua chave publica
+pois o \textit{keyserver} toma esse papel.
+
+\section{O que é a \textit{web of trust} e como ela é organizada:}\label{weboftrust}
 
 A \textit{web of trust} ou, banco de dados de confiabilidade,
 é organizada a partir de assinaturas de confiabilidade.
@@ -129,5 +215,83 @@ uma chave \textbf{K} pode ser considerada valida se ela:
 
 Seguindo esse algoritmo é consedido a cada chave da keyring um valor de validade possivelmente
 diferente do \textit{trust value}.
+
+\section{O que são sub-chaves e pra que elas servem?}
+
+O protocolo PGP da suporte a sub-chaves, ou \textit{subkeys}. \textit{Subkeys} são iguais a
+pares de chaves normais exceto pelo fato de estarem ligadas a um par de chaves mestre.
+O GPG cria um par de chaves mestre cujo a chave mestre prívada é somente para assinaturas
+e cria uma \textit{subkey} privada somente para criptografar.
+
+As \textit{subkeys} facilitam o gerenciamento de chaves. A chave mestre é muito importante
+pois é a melhor prova de sua identidade online para vários serviços. Na eventual perda da
+chave mestre privada, será necessario construir a \textit{web of trust} novamente.
+É necessario manter a chave mestre privada super segura. Contudo, manter todas suas chaves
+de mandaira extremamente segura é inconveniente.
+
+Usando \textit{subkeys} é possivel manter somente as subkeys nos computadores de uso pessoal
+e guardar a chave privada em segurança.
+
+Após criar uma segunda \textit{subkey} para assinaturas, só sera necessario o uso da chave privada
+nas seguintes ocasiões:
+\begin{itemize}
+  \item quando você assinal ou revogar a chave publica de outra pessoa; ou
+  \item quando você addicionar um novo UID ou editar um existente; ou
+  \item quando você criar uma nova \textit{subkey}; ou
+  \item quando você revogar um UID ou \textit{subkey}; ou
+  \item quando você editar a data de vencimento da chave mestre ou qualquer \textit{subkey}; ou
+  \item quando você revogar ou gerar um certificado de revogação para uma chave completa.
+\end{itemize}
+
+\section{Coloque uma foto no seu certificado GPG}
+
+Para colocar uma foto em meu certificado GPG foram executados os seguintes comandos:
+\begin{quote}
+  gpg --edit-key bernardo.mferrari@gmail.com \\
+  gpg \textgreater{} addphoto pikachu.jpg \\
+  gpg \textgreater{} save
+\end{quote}
+
+\section{O que é preciso para criar e manter um servidor de chaves GPG, sincronizado com os demais servidores existentes?}
+
+No protocolo PGP clientes acabam confiando em \textit{keyservers} PGP para guardar e receber copias das chaves suas chaves
+publicas e das chaves publicas de terceiros. Essa comunicação entre os clientes PGP e \textit{keyservers} PGP se da utilizando
+o protocolo HKP (OpenPGP HTTP Keyserver Protocol) ou HKPS para a verção segura TLS\@.
+
+Um \textit{keyserver} malicioso poderia alterar as chaves e manipular a \textit{\textbf{web of trust}} ao seu favor, para isso
+foram criadas as \textit{\textbf{keyserver pool}}.
+
+\subsection{A \textit{keyserver pool}:}
+
+Para uma melhor segurança os \textit{keyservers} são organizados em um \textbf{DNS}.
+Quando um cliente OpenPGP precisa se comunicar com um \textit{keyservers} ele consulta
+o endereço hkps.pool.sks-keyservers.net que retorna a tablela de endereços ipv4 e ipv6
+de \textit{keyservers} onde o cliente escolhera aleatoriamente com quem se conectar.
+
+O dominio sks-keyservers.net é segurado pelo DNSSEC\@.
+
+\subsection{Como criar seu proprio \textit{keyserver} e conectalo à \textit{keyserver pool}: }
+
+Para configurar seu proprio OpenPGP \textit{keyserver} é utilizado o \textit{\textbf{Synchronizing OpenPGP Key Server (SKS)}}.
+Esse servidor vai ser inserido em uma \textit{keyserver pool} e se manter atualizado por uma \textit{mailing list} SKS do OpenPGP\@.
+
+\section{Dê um exemplo de como tornar sigiloso um arquivo usando o GPG:}
+
+Suponha que desejamos enviar um arquivo de texto \textbf{mydoc.txt} para outra pessoa, porém,
+precisamos tornar esse texto sigiloso para que nenhum terceiro possa compreender seu conteudo.
+O protocolo PGP torna isso possivel através dos seguintes comandos:
+\begin{quote}
+  gpg --armor --output mydoc.crypt.txt --encrypt --recipient nicolas0pfeifer@gmail.com mydoc.txt
+\end{quote}
+Assim o arquivo \textbf{mydoc.crypt.txt} só pode ser descriptografado pelo portador do par privado da chave pública utilizada
+para cifragem, o par foi identificado pelo \textit{UserID} nicolas0pfeifer@gmail.com.
+
+Foi me enviada também uma mensagem \textbf{oi.cript} criptografada com minha chave publica.
+Para descriptografar esta mensagem cifrada com a minha chave privada é utilizado o seguinte comando:
+\begin{quote}
+  gpg --output oi --decrypt oi.cript
+\end{quote}
+
+\section{Mostre um exemplo de como assinar um arquivo (assinatura anexada e outro com assinatura separada), usando o GPG:}
 
 \end{document}
